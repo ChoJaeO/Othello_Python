@@ -12,7 +12,14 @@ class Othello:
 
     def MainDrive(self):
         #게임 메인 드라이브
-        pass
+        while True:
+            self.coordinate_x = int(input("x좌표를 입력하세요."))
+            self.coordinate_y = int(input("y좌표를 입력하세요."))
+            if self.check_proper():
+                break
+        coordinate = (self.coordinate_x, self.coordinate_y)
+        self.change.changestones(self.board, coordinate, self.color)
+        self.color = 3-self.color
 
     def NewGame(self):
         #새 게임 시작 메서드
@@ -23,5 +30,31 @@ class Othello:
         self.board[4][3] = 2
         self.undogame.setstatus(self.board)
 
+        self.color = 1
+
         self.change.setblackcnt(2)
         self.change.setwhitecnt(2)
+
+    def check_proper(self):
+        range_0 = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
+        xy_status = False
+        for i , j in range_0:
+            try:
+                if self.board[self.coordinate_x + i][self.coordinate_y + j] != 0:
+                    xy_status = True
+                    print(xy_status)
+                    break
+            except IndexError:
+                pass
+        if not xy_status:
+            return xy_status
+
+        return self.board[self.coordinate_x][self.coordinate_y] == 0
+
+if __name__ == '__main__':
+    game = Othello()
+    game.NewGame()
+    print(game.board)
+    while True:
+        game.MainDrive()
+        print(game.board)
