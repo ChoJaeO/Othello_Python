@@ -1,50 +1,34 @@
 class Change:
     def __init__(self):
-        self.blackcnt = 2
-        self.whitecnt = 2
+        self.can_change = 0 ##### 돌의 색을 바꿀 수 있는 조건을 만족하면 1
+        self.changing = 0 ##### 이번턴에 바뀐 돌의 개수
 
-    def changestones(self, board, stone_location, color):	#stone_location : 흑돌 백돌 좌표값
-        #흑돌 백돌 뒤집는 메서드
-        x = stone_location[0]
-        y = stone_location[1]
+    def check(self, board, x, y, direction_x, direction_y, c):
         self.board = board
+        check_x = x + direction_x
+        check_y = y + direction_y
 
-        if color in self.board[x][y+1:]:
-            for i in range(y+1, 8, 1):
-                if self.board[x][i] == color:
-                    break
-                self.board[x][i] = 3-self.board[x][i]
-        if color in self.board[x][:y]:
-            for i in range(y-1, -1, -1):
-                if self.board[x][i] == color:
-                    break
-                self.board[x][i] = 3-self.board[x][i]
-        if color in [self.board[i][y] for i in range(x+1,8)]:
-            for j in range(x+1, 8, 1):
-                if self.board[j][y] == color:
-                    break
-                self.board[j][y] = 3 - self.board[j][y]
-        if color in [self.board[i][y] for i in range(x)]:
-            for j in range(x-1, -1, -1):
-                if self.board[j][y] == color:
-                    break
-                self.board[j][y] = 3 - self.board[j][y]
-        self.board[x][y] = color
+        if check_x == -1 or check_x == 8 or check_y == -1 or check_y == 8 or self.board[check_x][check_y] == 0 :
+            return
 
-    def getresult(self):
-        #결과값 반환 메서드 - 리스트 형태(좌표 형태)
-        return self.board
+        elif self.board[check_x][check_y] == 3 - c :
+            self.check(self.board, check_x, check_y, direction_x, direction_y, c)
+            if self.can_change == 1 :
+                self.board[check_x][check_y] = c
+                self.changing += 1
 
-    def getblackcnt(self):
-        #흑돌 개수 반환 메서드
-        return self.blackcnt
+        elif self.board[check_x][check_y] == c :
+            self.can_change = 1
+            return
 
-    def setblackcnt(self, n):
-        self.blackcnt = n
+    def changestones(self, board, x, y, color):	#stone_location : 흑돌 백돌 좌표값
+        #흑돌 백돌 뒤집는 메서드
+        self.board = board
+        eight_direction = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]] ##### 8방향
 
-    def getwhitecnt(self):
-        #백돌 개수 반환 메서드
-        return self.whitecnt
+        self.changing = 0
+        for i in range(8) :
+            self.can_change = 0
+            self.check(self.board, x, y, eight_direction[i][0], eight_direction[i][1], color)
 
-    def setwhitecnt(self, n):
-        self.whitecnt = n
+        return self.changing
