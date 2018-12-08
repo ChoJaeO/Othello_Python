@@ -23,9 +23,10 @@ class Othello:
         #게임 메인 드라이브
         while True:
             print("흑 돌의 개수 : %d   백 돌의 개수 : %d" %(self.black_count, self.white_count))
+            print(self.turn)
             self.put_x = int(input("x좌표를 입력하세요."))
             self.put_y = int(input("y좌표를 입력하세요."))
-            if self.check_proper():
+            if self.check_proper(self.put_x, self.put_y):
                 break
 
         self.board[self.put_x][self.put_y] = self.turn
@@ -41,12 +42,12 @@ class Othello:
         self.turn = 3 - self.turn ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
         return self.black_count + self.white_count
 
-    def check_proper(self):
+    def check_proper(self, put_x, put_y):
         range_0 = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
         xy_status = False
         for i , j in range_0:
             try:
-                if self.board[self.put_x + i][self.put_y + j] != 0:
+                if self.board[put_x + i][put_y + j] != 0:
                     xy_status = True
                     print(xy_status)
                     break
@@ -57,7 +58,7 @@ class Othello:
         if not xy_status:
             return xy_status
 
-        return self.board[self.put_x][self.put_y] == 0
+        return self.board[put_x][put_y] == 0
 
     def End_Game(self): ##### 게임이 종료된 후 승패 결정
         print("흑 돌의 개수 : %d    백 돌의 개수 : %d" %(self.black_count, self.white_count))
@@ -69,6 +70,30 @@ class Othello:
 
         else :
             print("무승부!!")
+
+    def getblack_count(self):
+        return self.black_count
+
+    def getwhite_count(self):
+        return self.white_count
+
+    def setblack_count(self, n):
+        self.black_count += n
+
+    def setwhite_count(self, n):
+        self.white_count += n
+
+    def getboard(self):
+        return self.board
+
+    def getturn(self):
+        return self.turn
+
+    def setturn(self, n):
+        self.turn = n
+
+    def setboard(self, x, y, t):
+        self.board[x][y] = t
 
 if __name__ == '__main__':
     game = Othello()
