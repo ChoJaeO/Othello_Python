@@ -51,10 +51,17 @@ class Othello:
 
         return self.board[self.coordinate_x][self.coordinate_y] == 0
 
+    def Game_Over(self):
+        for i in self.board:
+            if 0 in i:
+                return False
+        else:
+            return True
+
 if __name__ == '__main__':
     game = Othello()
     game.NewGame()
     print(game.board)
-    while True:
+    while not game.Game_Over():
         game.MainDrive()
         print(game.board)
