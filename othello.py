@@ -21,9 +21,10 @@ class Othello:
 
     def Main_Drive(self): # 돌을 둘 좌표 입력 및 게임 진행
         #게임 메인 드라이브
+        t = ['0', '흑', '백']
         while True:
             print("흑 돌의 개수 : %d   백 돌의 개수 : %d" %(self.black_count, self.white_count))
-            print(self.turn)
+            print("%s의 차례" %(t[self.turn]))
             self.put_x = int(input("x좌표를 입력하세요."))
             self.put_y = int(input("y좌표를 입력하세요."))
             if self.check_proper(self.put_x, self.put_y):
@@ -31,15 +32,20 @@ class Othello:
 
         self.board[self.put_x][self.put_y] = self.turn
         change_count = self.change.changestones(self.board, self.put_x, self.put_y, self.turn)
-        if self.turn == 1 :
-            self.black_count += change_count + 1
-            self.white_count -= change_count
+        if change_count == 0 :
+            print("그 위치에 돌을 놓을 수 없습니다.")
+            self.board[self.put_x][self.put_y] = 0
 
-        elif self.turn == 2 :
-            self.black_count -= change_count
-            self.white_count += change_count + 1
+        else :
+            if self.turn == 1 :
+                self.black_count += change_count + 1
+                self.white_count -= change_count
 
-        self.turn = 3 - self.turn ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
+            elif self.turn == 2 :
+                self.black_count -= change_count
+                self.white_count += change_count + 1
+
+            self.turn = 3 - self.turn ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
         return self.black_count + self.white_count
 
     def check_proper(self, put_x, put_y):
@@ -49,7 +55,6 @@ class Othello:
             try:
                 if self.board[put_x + i][put_y + j] != 0:
                     xy_status = True
-                    print(xy_status)
                     break
 
             except IndexError:
@@ -59,6 +64,7 @@ class Othello:
             return xy_status
 
         return self.board[put_x][put_y] == 0
+
 
     def End_Game(self): ##### 게임이 종료된 후 승패 결정
         print("흑 돌의 개수 : %d    백 돌의 개수 : %d" %(self.black_count, self.white_count))

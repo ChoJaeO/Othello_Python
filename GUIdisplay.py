@@ -11,7 +11,7 @@ class OthelloGame(QWidget):
         self.GameName.setText("Othello Game")
 
         self.turnstatus = QLabel()
-        self.turnstatus.setText("백돌 차례")
+        self.turnstatus.setText("흑돌 차례")
 
         self.gameerror = QLabel()
 
@@ -82,7 +82,8 @@ class OthelloGame(QWidget):
             self.blackstatus.setText(str(self.game.getblack_count()))
             self.whitestatus.setText(str(self.game.getwhite_count()))
             self.game.setturn(3-self.game.getturn())
-            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 2 else "백돌 차례")
+            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 1 else "백돌 차례")
+
         except IndexError:
             self.gameerror.setText("더이상 뒤로 갈수 없습니다.")
 
@@ -92,7 +93,7 @@ class OthelloGame(QWidget):
         self.setBoardGUI(self.game.getboard())
         self.blackstatus.setText("2")
         self.whitestatus.setText("2")
-        self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 2 else "백돌 차례")
+        self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 1 else "백돌 차례")
 
     def ButtonClicked(self):
         self.gameerror.setText("")
@@ -103,6 +104,7 @@ class OthelloGame(QWidget):
                     self.x = i
                     self.y = j
                     break
+
         if self.game.check_proper(self.x, self.y):
             for i in range(8):
                 print(self.game.getboard()[i])
@@ -112,10 +114,11 @@ class OthelloGame(QWidget):
             self.undogame.addstatus(self.game.getboard())
             self.undogame.addcntstatus([self.game.getblack_count(), self.game.getwhite_count()])
 
-            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 2 else "백돌 차례")
+            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 1 else "백돌 차례")
             if stone_count == 64:
                 self.gameerror.setText("게임 오버")
                 self.turnstatus.setText("흑돌 승" if self.game.getwhite_count() < self.game.getblack_count() else "백돌 승")
+
         else:
             self.gameerror.setText("올바른 돌을 놓아주세요.")
 
@@ -123,28 +126,38 @@ class OthelloGame(QWidget):
     def setBoardGUI(self, board):
         for i in range(8):
             for j in range(8):
-                if board[i][j] == 2:
+                if board[i][j] == 1:
                     self.buttonList[i][j].setText("●")
-                elif board[i][j] == 1:
+
+                elif board[i][j] == 2:
                     self.buttonList[i][j].setText("○")
+
                 else:
                     self.buttonList[i][j].setText("")
+
         self.blackstatus.setText(str(self.game.getblack_count()))
         self.whitestatus.setText(str(self.game.getwhite_count()))
 
     def MainDrive(self, x, y):
         change_Class = change.Change()
         change_count = change_Class.changestones(self.game.getboard(), x, y, self.game.getturn())
-        if self.game.getturn() == 2 :
-            self.game.addblack_count(change_count + 1)
-            self.game.addwhite_count(-change_count)
 
-        elif self.game.getturn() == 1 :
-            self.game.addwhite_count(change_count + 1)
-            self.game.addblack_count(-change_count)
+        if(change_count == 0) :
+            # 돌을 넣을수 없다는 라벨 출력
+            self.buttonList[x][y].setText("")
 
-        self.game.setboard(x, y, self.game.getturn())
-        self.game.setturn(3 - self.game.getturn()) ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
+        else :
+            if self.game.getturn() == 1:
+                self.game.addblack_count(change_count + 1)
+                self.game.addwhite_count(-change_count)
+
+            elif self.game.getturn() == 2 :
+                self.game.addblack_count(-change_count)
+                self.game.addwhite_count(change_count + 1)
+
+
+            self.game.setboard(x, y, self.game.getturn())
+            self.game.setturn(3 - self.game.getturn()) ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
 
         return self.game.getblack_count() + self.game.getwhite_count()
 
