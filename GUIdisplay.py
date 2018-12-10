@@ -40,6 +40,7 @@ class OthelloGame(QWidget):
         for i in range(8):
             for j in range(8):
                 self.buttonLayout.addWidget(self.buttonList[i][j], i, j)
+                self.buttonLayout.setSizeConstraint(QLayout.SetFixedSize)
 
         for i in range(8):
             for j in range(8):
@@ -115,7 +116,8 @@ class OthelloGame(QWidget):
 
         if self.game.check_proper(self.x, self.y):
             for i in range(8):
-                print(self.game.getboard()[i])
+                pass
+                #print(self.game.getboard()[i])
             stone_count = self.MainDrive(self.x, self.y)
             self.setBoardGUI(self.game.getboard())
 
