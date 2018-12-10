@@ -8,7 +8,7 @@ class UndoTurn:
 
     def addstatus(self, new_status):	#new_status : 최근 게임 판
         #최근 게임 판 추가
-        self.game_status.append(new_status)
+        self.game_status += [new_status]
         print(self.game_status)
 
     def getstatus(self):
@@ -19,7 +19,7 @@ class UndoTurn:
 
     def addcntstatus(self, new_cnt_status):
         print(new_cnt_status)
-        self.cnt_status.append(new_cnt_status)
+        self.cnt_status += [new_cnt_status]
         print(self.cnt_status)
 
     def getcntstatus(self):

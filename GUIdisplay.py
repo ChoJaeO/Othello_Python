@@ -74,6 +74,7 @@ class OthelloGame(QWidget):
     def UndoGame(self):
         try:
             self.game.undoboard(self.undogame.getstatus())
+            print(self.game.getboard())
             self.setBoardGUI(self.game.getboard())
             a = self.undogame.getcntstatus()
             print(a)
