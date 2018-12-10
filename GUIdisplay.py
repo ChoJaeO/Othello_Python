@@ -61,14 +61,21 @@ class OthelloGame(QWidget):
         mainLayout.addLayout(self.settingLayout, 5, 0)
 
         self.game = othello.Othello()
+        self.newgameButton.clicked.connect(self.settingNewGame)
         self.game.New_Game()  # 게임을 시작한다
         self.setBoardGUI(self.game.getboard())
 
         self.setLayout(mainLayout)
         self.setWindowTitle("Othello")
 
+    def settingNewGame(self):
+        self.game.New_Game()
+        self.setBoardGUI(self.game.getboard())
+        self.blackstatus.setText("2")
+        self.whitestatus.setText("2")
+        self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 2 else "백돌 차례")
+
     def ButtonClicked(self):
-        self.turnstatus.setText("흑돌 차례" if self.game.turn == 2 else "백돌 차례")
         sender = self.sender()
         for i in range(8):
             for j in range(8):
@@ -82,8 +89,10 @@ class OthelloGame(QWidget):
             stone_count = 0
             stone_count = self.MainDrive(self.x, self.y)
             self.setBoardGUI(self.game.getboard())
+            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 2 else "백돌 차례")
             if stone_count == 64:
                 self.gameerror.setText("게임 오버")
+                self.turnstatus.setText("흑돌 승" if self.game.getwhite_count() < self.game.getblack_count() else "백돌 승")
         else:
             self.gameerror.setText("올바른 돌을 놓아주세요.")
 
@@ -103,11 +112,11 @@ class OthelloGame(QWidget):
     def MainDrive(self, x, y):
         change_Class = change.Change()
         change_count = change_Class.changestones(self.game.getboard(), x, y, self.game.getturn())
-        if self.game.getturn() == 1 :
+        if self.game.getturn() == 2 :
             self.game.setblack_count(change_count + 1)
             self.game.setwhite_count(-change_count)
 
-        elif self.game.getturn() == 2 :
+        elif self.game.getturn() == 1 :
             self.game.setwhite_count(change_count + 1)
             self.game.setblack_count(-change_count)
 

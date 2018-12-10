@@ -16,7 +16,7 @@ class Othello:
         self.board[3][3] = self.board[4][4] = 1
         self.board[3][4] = self.board[4][3] = 2 ##### 게임 초기의 판은 흑돌 백돌 2개가 판의 가운데서 서로 엇갈려있는 상태
         self.black_count = self.white_count = 2
-
+        self.turn = 1
         self.undogame.setstatus(self.board)
 
     def Main_Drive(self): # 돌을 둘 좌표 입력 및 게임 진행
