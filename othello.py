@@ -77,11 +77,17 @@ class Othello:
     def getwhite_count(self):
         return self.white_count
 
-    def setblack_count(self, n):
+    def addblack_count(self, n):
         self.black_count += n
 
-    def setwhite_count(self, n):
+    def setblack_count(self, n):
+        self.black_count = n
+
+    def addwhite_count(self, n):
         self.white_count += n
+
+    def setwhite_count(self, n):
+        self.white_count = n
 
     def getboard(self):
         return self.board
@@ -94,6 +100,9 @@ class Othello:
 
     def setboard(self, x, y, t):
         self.board[x][y] = t
+
+    def undoboard(self, undo):
+        self.board = undo
 
 if __name__ == '__main__':
     game = Othello()
