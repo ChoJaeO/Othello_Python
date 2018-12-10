@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (QApplication, QWidget, QLayout, QGridLayout, QTextEdit, QLineEdit, QToolButton, QLabel, QHBoxLayout, QVBoxLayout, QPushButton)
+from PyQt5.QtCore import Qt
 import sys
 import othello
 import change
@@ -9,11 +10,14 @@ class OthelloGame(QWidget):
         super().__init__(parent)
         self.GameName = QLabel()
         self.GameName.setText("Othello Game")
+        self.GameName.setAlignment(Qt.AlignCenter)
 
         self.turnstatus = QLabel()
         self.turnstatus.setText("흑돌 차례")
+        self.turnstatus.setAlignment(Qt.AlignCenter)
 
         self.gameerror = QLabel()
+        self.gameerror.setAlignment(Qt.AlignCenter)
 
         self.blackplayer = QLabel()
         self.blackplayer.setText("●")
@@ -73,6 +77,7 @@ class OthelloGame(QWidget):
 
     def UndoGame(self):
         try:
+            self.gameerror.setText("")
             self.game.undoboard(self.undogame.getstatus())
             print(self.game.getboard())
             self.setBoardGUI(self.game.getboard())
@@ -87,9 +92,11 @@ class OthelloGame(QWidget):
 
         except IndexError:
             self.gameerror.setText("더이상 뒤로 갈수 없습니다.")
+            self.undogame = undogame.UndoTurn()
 
     def settingNewGame(self):
         self.undogame = undogame.UndoTurn()
+        self.gameerror.setText("")
         self.game.New_Game()
         self.setBoardGUI(self.game.getboard())
         self.blackstatus.setText("2")
@@ -145,7 +152,7 @@ class OthelloGame(QWidget):
 
         if(change_count == 0) :
             # 돌을 넣을수 없다는 라벨 출력
-            self.buttonList[x][y].setText("")
+            self.gameerror.setText("올바른 돌을 놓아주세요")
 
         else :
             if self.game.getturn() == 1:
