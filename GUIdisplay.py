@@ -106,6 +106,7 @@ class OthelloGame(QWidget):
 
     def ButtonClicked(self):
         self.gameerror.setText("")
+        self.newgameButton.setEnabled(False)
         sender = self.sender()
         for i in range(8):
             for j in range(8):
@@ -128,6 +129,7 @@ class OthelloGame(QWidget):
             if stone_count == 64:
                 self.gameerror.setText("게임 오버")
                 self.turnstatus.setText("흑돌 승" if self.game.getwhite_count() < self.game.getblack_count() else "백돌 승")
+                self.newgameButton.setEnabled(False)
 
         else:
             self.gameerror.setText("올바른 돌을 놓아주세요.")
