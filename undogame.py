@@ -1,3 +1,5 @@
+import copy
+
 class UndoTurn:
     def __init__(self):
         self.game_status = [[[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 2, 0, 0, 0], [0, 0, 0, 2, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]],]
@@ -8,7 +10,7 @@ class UndoTurn:
 
     def addstatus(self, new_status):	#new_status : 최근 게임 판
         #최근 게임 판 추가
-        self.game_status += [new_status]
+        self.game_status += [copy.deepcopy(new_status)]
         print(self.game_status)
 
     def getstatus(self):
