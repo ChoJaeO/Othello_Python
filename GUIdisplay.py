@@ -79,9 +79,8 @@ class OthelloGame(QWidget):
     def UndoGame(self):
         try:
             self.gameerror.setText("")
-            self.game.undoboard(self.undogame.getstatus())
-            print(self.game.getboard())
-            self.setBoardGUI(self.game.getboard())
+            self.setBoardGUI(self.undogame.getstatus())
+
             a = self.undogame.getcntstatus()
             print(a)
             self.game.setblack_count(a[0])
@@ -115,24 +114,15 @@ class OthelloGame(QWidget):
                     self.y = j
                     break
 
-        if self.game.check_proper(self.x, self.y):
-            for i in range(8):
-                pass
-                #print(self.game.getboard()[i])
-            stone_count = self.MainDrive(self.x, self.y)
-            self.setBoardGUI(self.game.getboard())
 
-            self.undogame.addstatus(self.game.getboard())
-            self.undogame.addcntstatus([self.game.getblack_count(), self.game.getwhite_count()])
+        stone_count = self.MainDrive(self.x, self.y)
+        self.setBoardGUI(self.game.getboard())
 
-            self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 1 else "백돌 차례")
-            if stone_count == 64:
-                self.gameerror.setText("게임 오버")
-                self.turnstatus.setText("흑돌 승" if self.game.getwhite_count() < self.game.getblack_count() else "백돌 승")
-                self.newgameButton.setEnabled(False)
-
-        else:
-            self.gameerror.setText("올바른 돌을 놓아주세요.")
+        self.turnstatus.setText("흑돌 차례" if self.game.getturn() == 1 else "백돌 차례")
+        if stone_count == 64:
+            self.gameerror.setText("게임 오버")
+            self.turnstatus.setText("흑돌 승" if self.game.getwhite_count() < self.game.getblack_count() else "백돌 승")
+            self.newgameButton.setEnabled(False)
 
 
     def setBoardGUI(self, board):
@@ -170,6 +160,9 @@ class OthelloGame(QWidget):
 
             self.game.setboard(x, y, self.game.getturn())
             self.game.setturn(3 - self.game.getturn()) ########## 턴 변경 (흑을 둔 뒤엔 백, 백을 둔 뒤엔 흑으로 변경)
+
+            self.undogame.addstatus(self.game.getboard())
+            self.undogame.addcntstatus([self.game.getblack_count(), self.game.getwhite_count()])
 
         return self.game.getblack_count() + self.game.getwhite_count()
 
